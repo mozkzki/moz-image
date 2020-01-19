@@ -1,0 +1,22 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+requests = "==2.22.0"
+
+[dev-packages]
+"flake8" = "==3.6.0"
+mypy = "==0.641"
+pytest = "==3.9.3"
+black = "==18.9b0"
+pytest-cov = "==2.6.0"
+
+[requires]
+python_version = "3.6"
+
+[scripts]
+v = "python --version"
+ut = "py.test -v --capture=no --cov-config .coveragerc --cov=. ."
+lint = "flake8 --max-line-length=100 --ignore=E203,W503 ."
