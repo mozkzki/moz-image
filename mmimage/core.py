@@ -1,4 +1,5 @@
 import os
+import sys
 import requests
 
 
@@ -42,8 +43,15 @@ def _save_image(file_path: str, image: bytes) -> None:
 
 
 def convert(path: str, new_path: str = None) -> None:
+    if os.path.isfile(path) is not True:
+        print("file does not exists. path={}".format(path), file=sys.stderr)
+        return
+
     if new_path is None:
         new_path = path
+
+    # ディレクトリが存在しない場合は作る
+    os.makedirs(os.path.dirname(new_path), exist_ok=True)
 
     # imagemagicが必要
     cmd = "convert {} -background none -gravity center -extent 302x200 {}".format(path, new_path)

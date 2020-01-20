@@ -1,6 +1,6 @@
 # mmimage
 
-## 依存ライブラリ
+## 依存ツール
 
 - ImageMagick
 
@@ -23,12 +23,18 @@ pip install git+https://github.com/yukkun007/mmimage
 pip install --upgrade git+https://github.com/yukkun007/mmimage
 ```
 
-## 使い方
+## 使い方 (モジュールを利用)
 
 ```(sh)
 python
 >>> import mmimage
 >>> mmimage.hello()
+```
+
+## 使い方 (コマンドラインアプリを実行)
+
+```(sh)
+mmimage
 ```
 
 ## アンインストール
@@ -38,10 +44,6 @@ pip uninstall mmimage
 ```
 
 ## 開発フロー
-
-### 依存ツール
-
-- pipenv
 
 ### 環境構築
 
@@ -94,7 +96,7 @@ python
 ### コマンドラインアプリを実行
 
 ```(sh)
-pipenv run start
+pipenv run start (もしくはmmimage)
 ```
 
 ### unit test
