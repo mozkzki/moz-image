@@ -138,3 +138,14 @@ python setup.py bdist_wheel (wheelパッケージが必要)
 ```(sh)
 pip install mmimage-0.0.1-py3-none-any.whl
 ```
+
+## 参考
+
+### パッケージング/開発環境
+
+- <https://techblog.asahi-net.co.jp/entry/2018/06/15/162951>
+- <https://techblog.asahi-net.co.jp/entry/2018/11/19/103455>
+
+### コマンドライン引数のパース
+
+- <https://qiita.com/kzkadc/items/e4fc7bc9c003de1eb6d0>
