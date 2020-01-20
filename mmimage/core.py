@@ -5,6 +5,10 @@ import requests
 GYAZO_UPLOAD_URL = "https://upload.gyazo.com/api/upload"
 
 
+def hello():
+    print("hello!!")
+
+
 def download(url):
     file_path = _make_file_path(url)
     image = _download_image(url)
