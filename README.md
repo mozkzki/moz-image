@@ -117,6 +117,12 @@ pipenv run ut
 pipenv run lint
 ```
 
+### create api document (sphix)
+
+```(sh)
+pipenv run doc
+```
+
 ### ソースコード配布物の作成
 
 dist/ 以下にmmimage-0.0.1.tar.gzが生成される。

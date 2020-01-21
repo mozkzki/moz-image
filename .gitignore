@@ -115,3 +115,6 @@ dmypy.json
 
 # environment variable
 .env
+
+# document (とりあえずまだコミットしない)
+docs/
