@@ -1,5 +1,7 @@
+import os
 import pytest
 import mmimage as image
+from dotenv import load_dotenv
 
 
 class TestImage:
@@ -10,7 +12,12 @@ class TestImage:
     def test_all(self):
         path = image.download(TestImage.SAMPLE_URL)
         image.convert(path)
-        image.upload_to_gyazo(path, "please specify gyazo access token")
+        image.upload_to_gyazo(path)  # use .env
+
+    def test_all_invalid_token(self):
+        path = image.download(TestImage.SAMPLE_URL)
+        image.convert(path)
+        image.upload_to_gyazo(path, "invalid_token")
 
     def test_convert(self):
         path = image.download(TestImage.SAMPLE_URL)

@@ -5,6 +5,7 @@ name = "pypi"
 
 [packages]
 requests = "==2.22.0"
+python-dotenv = "==0.10.5"
 
 [dev-packages]
 "flake8" = "==3.6.0"

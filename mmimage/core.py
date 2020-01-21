@@ -1,7 +1,7 @@
 import os
 import sys
 import requests
-
+from dotenv import load_dotenv
 
 GYAZO_UPLOAD_URL = "https://upload.gyazo.com/api/upload"
 
@@ -58,11 +58,23 @@ def convert(path: str, new_path: str = None) -> None:
     os.system(cmd)
 
 
-def upload_to_gyazo(path: str, access_token: str) -> str:
+def upload_to_gyazo(path: str, access_token: str = None) -> str:
     image = open(path, "rb")
     files = {"imagedata": ("filename.jpg", image, "image/jpeg")}
-    data = {"access_token": access_token}
-    response = requests.post(GYAZO_UPLOAD_URL, files=files, data=data)
-    url = response.json()["url"]
 
+    # 引数指定がなければ環境変数からaccess token読み込み
+    if access_token is None:
+        load_dotenv(verbose=True)
+        access_token = os.environ.get("gyazo_access_token", "dummy_token")
+
+    data = {"access_token": access_token}
+    response: requests.models.Response = requests.post(GYAZO_UPLOAD_URL, files=files, data=data)
+    if response.reason == "Unauthorized" and response.status_code == 401:
+        print(
+            "[error] gyazo access token is invalid!",
+            "please set correct token by environment variable <gyazo_access_token>.",
+        )
+        return ""
+
+    url = response.json()["url"]
     return url

@@ -1,5 +1,11 @@
 # mmimage
 
+## 必要な環境変数
+
+```(sh)
+gyazo_access_token=<please specify gyazo access toke>
+```
+
 ## 依存ツール
 
 - ImageMagick
