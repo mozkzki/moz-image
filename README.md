@@ -155,3 +155,7 @@ pip install mmimage-0.0.1-py3-none-any.whl
 ### コマンドライン引数のパース
 
 - <https://qiita.com/kzkadc/items/e4fc7bc9c003de1eb6d0>
+
+### 環境変数の定義
+
+- <https://pod.hatenablog.com/entry/2019/04/29/164109>
