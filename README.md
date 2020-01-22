@@ -6,17 +6,6 @@
 gyazo_access_token=<please specify gyazo access toke>
 ```
 
-## 依存ツール
-
-- ImageMagick
-
-### ImageMagick導入
-
-```(sh)
-yum -y install ImageMagick
-yum -y install ImageMagick-devel
-```
-
 ## インストール
 
 ```(sh)
