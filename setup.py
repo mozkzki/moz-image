@@ -25,7 +25,7 @@ setup(
     include_package_data=True,
     zip_safe=False,
     python_requires=">=3.6",
-    install_requires=["requests", "python-dotenv", "pillow"],
+    install_requires=["requests==2.23.0", "python-dotenv==0.10.5", "pillow==7.0.0"],
     entry_points="""
         [console_scripts]
         {app} = {app}.cli:main
