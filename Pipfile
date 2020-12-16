@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-requests = "==2.25.0"
+requests = "==2.25.1"
 python-dotenv = "==0.15.0"
 pillow = "==8.0.1"
 
