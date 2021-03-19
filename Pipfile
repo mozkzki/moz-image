@@ -6,7 +6,7 @@ name = "pypi"
 [packages]
 requests = "==2.24.0"
 python-dotenv = "==0.15.0"
-pillow = "==8.0.1"
+pillow = "==8.1.1"
 
 [dev-packages]
 flake8 = "==3.8.4"
