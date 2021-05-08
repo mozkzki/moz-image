@@ -9,7 +9,7 @@ python-dotenv = "==0.17.1"
 pillow = "==8.2.0"
 
 [dev-packages]
-flake8 = "==3.9.1"
+flake8 = "==3.9.2"
 mypy = "==0.812"
 pytest = "==6.2.4"
 black = "==21.5b0"
