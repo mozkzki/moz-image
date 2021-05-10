@@ -15,7 +15,7 @@ pytest = "==6.2.4"
 black = "==21.5b1"
 pytest-cov = "==2.11.1"
 coverage = "==5.5"
-sphinx = "==4.0.0"
+sphinx = "==4.0.1"
 
 [requires]
 python_version = "3.6"
