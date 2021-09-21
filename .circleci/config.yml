@@ -124,7 +124,7 @@ commands:
             mkdir git_sparse
             cd git_sparse
             git init
-            git remote add origin ${CIRCLE_REPOSITORY_URL}
+            git remote add origin https://github.com/mozkzki/${CIRCLE_PROJECT_REPONAME}.git
             git config core.sparsecheckout true
             echo "poetry.lock" > .git/info/sparse-checkout
             echo "pyproject.toml" >> .git/info/sparse-checkout
