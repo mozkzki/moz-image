@@ -116,6 +116,24 @@ commands:
               ]
             }
 
+  sparse:
+    steps:
+      - run:
+          name: Sparse checkout
+          command: |
+            python --version
+            poetry config virtualenvs.path ${CIRCLE_WORKING_DIRECTORY}
+            poetry update
+            mkdir ${CIRCLE_WORKING_DIRECTORY}/temp/git_sparse
+            cd ${CIRCLE_WORKING_DIRECTORY}/temp/git_sparse
+            git init
+            git remote add origin ${CIRCLE_REPOSITORY_URL}
+            git config core.sparsecheckout true
+            echo "poetry.lock" > .git/info/sparse-checkout
+            echo "pyproject.toml" >> .git/info/sparse-checkout
+            cd ${CIRCLE_WORKING_DIRECTORY}
+            ls -al ${CIRCLE_WORKING_DIRECTORY}/temp/git_sparse/
+
   restore:
     steps:
       - when:
@@ -155,6 +173,7 @@ jobs:
   setup:
     executor: my-executor
     steps:
+      - sparse
       - checkout
       - when:
           condition:
@@ -167,7 +186,7 @@ jobs:
                   pwd
                   whoami
                   python --version
-                  poetry config virtualenvs.path ~/CircleCIWork/
+                  poetry config virtualenvs.path $CIRCLE_WORKING_DIRECTORY
                   poetry update
             - save
             - store_artifacts:
