@@ -121,15 +121,15 @@ commands:
       - run:
           name: Sparse checkout
           command: |
-            mkdir ${CIRCLE_WORKING_DIRECTORY}/temp/git_sparse
-            cd ${CIRCLE_WORKING_DIRECTORY}/temp/git_sparse
+            mkdir ${CIRCLE_WORKING_DIRECTORY}/git_sparse
+            cd ${CIRCLE_WORKING_DIRECTORY}/git_sparse
             git init
             git remote add origin ${CIRCLE_REPOSITORY_URL}
             git config core.sparsecheckout true
             echo "poetry.lock" > .git/info/sparse-checkout
             echo "pyproject.toml" >> .git/info/sparse-checkout
             cd ${CIRCLE_WORKING_DIRECTORY}
-            ls -al ${CIRCLE_WORKING_DIRECTORY}/temp/git_sparse/
+            ls -al ${CIRCLE_WORKING_DIRECTORY}/git_sparse/
 
   restore:
     steps:
