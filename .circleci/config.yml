@@ -155,12 +155,12 @@ jobs:
   setup:
     executor: my-executor
     steps:
-      - checkout
       - when:
           condition:
             matches: { pattern: "^dependabot.+$", value: << pipeline.git.branch >> }
           steps:
             - restore
+            - checkout
             - run:
                 name: Install for resolve dependency
                 command: |
@@ -178,6 +178,7 @@ jobs:
             matches: { pattern: "^dependabot.+$", value: << pipeline.git.branch >> }
           steps:
             - restore
+            - checkout
             - run:
                 name: Install
                 command: |
@@ -192,8 +193,8 @@ jobs:
   lint:
     executor: my-executor
     steps:
-      - checkout
       - restore
+      - checkout
       - run:
           name: Lint
           command: |
@@ -204,8 +205,8 @@ jobs:
   test:
     executor: my-executor
     steps:
-      - checkout
       - restore
+      - checkout
       - run:
           name: Test
           command: |
