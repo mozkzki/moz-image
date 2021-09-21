@@ -194,6 +194,7 @@ jobs:
     steps:
       - checkout
       - restore
+      - checkout
       - run:
           name: Lint
           command: |
