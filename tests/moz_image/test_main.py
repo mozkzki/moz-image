@@ -5,7 +5,7 @@ import moz_image as image
 
 
 class TestImage:
-    SAMPLE_URL_1 = "https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/7942/79421478.jpg?_ex=200x200"
+    SAMPLE_URL_1 = "https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/7942/79421478.jpg?_ex=200x200"  # noqa: E501
     SAMPLE_URL_2 = "https://prtimes.jp/i/23199/41/resize/d23199-41-642045-0.jpg"
 
     def test_all(self):
