@@ -1,13 +1,11 @@
 import os
 import uuid
 import pytest
-import mmimage as image
+import moz_image as image
 
 
 class TestImage:
-    SAMPLE_URL_1 = (
-        "https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/7942/79421478.jpg?_ex=200x200"
-    )
+    SAMPLE_URL_1 = "https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/7942/79421478.jpg?_ex=200x200"
     SAMPLE_URL_2 = "https://prtimes.jp/i/23199/41/resize/d23199-41-642045-0.jpg"
 
     def test_all(self):
@@ -15,7 +13,7 @@ class TestImage:
             image.resize(save_path, width=200)
             assert os.path.isfile(save_path) is True
             url = image.upload_to_gyazo(save_path)  # use .env
-            assert url is not ""
+            assert url != ""
         assert os.path.isfile(save_path) is False
 
     def test_all_invalid_token(self):
@@ -36,12 +34,10 @@ class TestImage:
         image.resize(str(uuid.uuid4()))
 
     @pytest.mark.parametrize(
-        "url", [("https://thumbnail.image.rakuten.co.jp/hoge"), ("http://www.google.co.jp")]
+        "url",
+        [("https://thumbnail.image.rakuten.co.jp/hoge"), ("http://www.google.co.jp")],
     )
     def test_download_error(self, url):
         with pytest.raises(Exception):
             with image.download(url):
                 pass
-
-    def test_hello(self):
-        image.hello()

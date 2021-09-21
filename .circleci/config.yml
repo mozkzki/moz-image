@@ -1,0 +1,233 @@
+version: 2.1
+executors:
+  my-executor:
+    docker:
+      - image: circleci/python:3.8.1-browsers
+    working_directory: ~/CircleCIWork
+
+orbs:
+  slack: circleci/slack@4.4.4
+
+commands:
+  notify_success_slack:
+    steps:
+      - slack/notify:
+          event: pass
+          custom: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "plain_text",
+                    "text": ":tada: ${CIRCLE_JOB} ジョブが成功しました。",
+                    "emoji": true
+                  },
+                  "fields": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Repogitory*:\n${CIRCLE_PROJECT_REPONAME}"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Branch*:\n${CIRCLE_BRANCH}"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Commiter*:\n${CIRCLE_USERNAME}"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*SHA*:\n${CIRCLE_SHA1}"
+                    }
+                  ],
+                  "accessory": {
+                    "type": "image",
+                    "image_url": "https://assets.brandfolder.com/otz5mn-bw4j2w-6jzqo8/original/circle-logo-badge-black.png",
+                    "alt_text": "CircleCI logo"
+                  }
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "View Job"
+                      },
+                      "url": "${CIRCLE_BUILD_URL}"
+                    }
+                  ]
+                }
+              ]
+            }
+
+  notify_fail_slack:
+    steps:
+      - slack/notify:
+          event: fail
+          custom: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "⚠ *${CIRCLE_JOB}* ジョブが失敗しました。"
+                  },
+                  "fields": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Repogitory*:\n${CIRCLE_PROJECT_REPONAME}"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Branch*:\n${CIRCLE_BRANCH}"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Commiter*:\n${CIRCLE_USERNAME}"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*SHA*:\n${CIRCLE_SHA1}"
+                    }
+                  ],
+                  "accessory": {
+                    "type": "image",
+                    "image_url": "https://assets.brandfolder.com/otz5mn-bw4j2w-6jzqo8/original/circle-logo-badge-black.png",
+                    "alt_text": "CircleCI logo"
+                  }
+                },
+                {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "View Job"
+                      },
+                      "url": "${CIRCLE_BUILD_URL}"
+                    }
+                  ]
+                }
+              ]
+            }
+
+  restore:
+    steps:
+      - when:
+          condition:
+            matches: { pattern: "^dependabot.+$", value: << pipeline.git.branch >> }
+          steps:
+            - restore_cache:
+                key: moz-image-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ checksum "pyproject.toml" }}
+      - unless:
+          condition:
+            matches: { pattern: "^dependabot.+$", value: << pipeline.git.branch >> }
+          steps:
+            - restore_cache:
+                key: moz-image-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ checksum "poetry.lock" }}
+
+  save:
+    steps:
+      - when:
+          condition:
+            matches: { pattern: "^dependabot.+$", value: << pipeline.git.branch >> }
+          steps:
+            - save_cache:
+                paths:
+                  - "."
+                key: moz-image-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ checksum "pyproject.toml" }}
+      - unless:
+          condition:
+            matches: { pattern: "^dependabot.+$", value: << pipeline.git.branch >> }
+          steps:
+            - save_cache:
+                paths:
+                  - "."
+                key: moz-image-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ checksum "poetry.lock" }}
+
+jobs:
+
+  setup:
+    executor: my-executor
+    steps:
+      - checkout
+      - when:
+          condition:
+            matches: { pattern: "^dependabot.+$", value: << pipeline.git.branch >> }
+          steps:
+            - restore
+            - run:
+                name: Install for resolve dependency
+                command: |
+                  pwd
+                  whoami
+                  python --version
+                  poetry config virtualenvs.path ~/CircleCIWork/
+                  poetry update
+            - save
+            - store_artifacts:
+                path: ./poetry.lock
+            - notify_fail_slack
+      - unless:
+          condition:
+            matches: { pattern: "^dependabot.+$", value: << pipeline.git.branch >> }
+          steps:
+            - restore
+            - run:
+                name: Install
+                command: |
+                  pwd
+                  whoami
+                  python --version
+                  poetry config virtualenvs.path ~/CircleCIWork/
+                  poetry install
+            - save
+            - notify_fail_slack
+
+  lint:
+    executor: my-executor
+    steps:
+      - checkout
+      - restore
+      - run:
+          name: Lint
+          command: |
+            source $(find ~/CircleCIWork -name moz-image*)/bin/activate
+            make lint
+      - notify_fail_slack
+
+  test:
+    executor: my-executor
+    steps:
+      - checkout
+      - restore
+      - run:
+          name: Test
+          command: |
+            source $(find ~/CircleCIWork -name moz-image*)/bin/activate
+            make ut
+            bash <(curl -s https://codecov.io/bash)
+      - store_artifacts:
+          path: ./image.png
+      - notify_success_slack
+      - notify_fail_slack
+
+workflows:
+  version: 2.1
+  build-and-test-workflow:
+    jobs:
+      - setup:
+          context: ci
+      - lint:
+          requires:
+            - setup
+          context: ci
+      - test:
+          requires:
+            - lint
+          context: ci

@@ -9,10 +9,6 @@ from PIL import Image as pimage
 GYAZO_UPLOAD_URL = "https://upload.gyazo.com/api/upload"
 
 
-def hello():
-    print("hello!!")
-
-
 @contextmanager
 def download(url: str):
     image = _download_image(url)
