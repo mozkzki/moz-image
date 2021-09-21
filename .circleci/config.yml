@@ -121,9 +121,6 @@ commands:
       - run:
           name: Sparse checkout
           command: |
-            python --version
-            poetry config virtualenvs.path ${CIRCLE_WORKING_DIRECTORY}
-            poetry update
             mkdir ${CIRCLE_WORKING_DIRECTORY}/temp/git_sparse
             cd ${CIRCLE_WORKING_DIRECTORY}/temp/git_sparse
             git init
