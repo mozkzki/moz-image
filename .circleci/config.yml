@@ -121,15 +121,16 @@ commands:
       - run:
           name: Sparse checkout
           command: |
-            mkdir ${CIRCLE_WORKING_DIRECTORY}/git_sparse
-            cd ${CIRCLE_WORKING_DIRECTORY}/git_sparse
+            mkdir git_sparse
+            cd git_sparse
             git init
             git remote add origin ${CIRCLE_REPOSITORY_URL}
             git config core.sparsecheckout true
             echo "poetry.lock" > .git/info/sparse-checkout
             echo "pyproject.toml" >> .git/info/sparse-checkout
-            cd ${CIRCLE_WORKING_DIRECTORY}
-            ls -al ${CIRCLE_WORKING_DIRECTORY}/git_sparse/
+            git pull --depth=1 origin ${CIRCLE_BRANCH}
+            cd ..
+            ls -al git_sparse
 
   restore:
     steps:
@@ -138,13 +139,13 @@ commands:
             matches: { pattern: "^dependabot.+$", value: << pipeline.git.branch >> }
           steps:
             - restore_cache:
-                key: moz-image-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ checksum "pyproject.toml" }}
+                key: key-{{ .Environment.CIRCLE_PROJECT_REPONAME }}-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ checksum "pyproject.toml" }}
       - unless:
           condition:
             matches: { pattern: "^dependabot.+$", value: << pipeline.git.branch >> }
           steps:
             - restore_cache:
-                key: moz-image-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ checksum "poetry.lock" }}
+                key: key-{{ .Environment.CIRCLE_PROJECT_REPONAME }}-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ checksum "poetry.lock" }}
 
   save:
     steps:
@@ -155,7 +156,7 @@ commands:
             - save_cache:
                 paths:
                   - "."
-                key: moz-image-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ checksum "pyproject.toml" }}
+                key: key-{{ .Environment.CIRCLE_PROJECT_REPONAME }}-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ checksum "pyproject.toml" }}
       - unless:
           condition:
             matches: { pattern: "^dependabot.+$", value: << pipeline.git.branch >> }
@@ -163,7 +164,7 @@ commands:
             - save_cache:
                 paths:
                   - "."
-                key: moz-image-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ checksum "poetry.lock" }}
+                key: key-{{ .Environment.CIRCLE_PROJECT_REPONAME }}-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ checksum "poetry.lock" }}
 
 jobs:
 
@@ -171,12 +172,12 @@ jobs:
     executor: my-executor
     steps:
       - sparse
+      - restore
       - checkout
       - when:
           condition:
             matches: { pattern: "^dependabot.+$", value: << pipeline.git.branch >> }
           steps:
-            - restore
             - run:
                 name: Install for resolve dependency
                 command: |
@@ -193,14 +194,13 @@ jobs:
           condition:
             matches: { pattern: "^dependabot.+$", value: << pipeline.git.branch >> }
           steps:
-            - restore
             - run:
                 name: Install
                 command: |
                   pwd
                   whoami
                   python --version
-                  poetry config virtualenvs.path ~/CircleCIWork/
+                  poetry config virtualenvs.path $CIRCLE_WORKING_DIRECTORY
                   poetry install
             - save
             - notify_fail_slack
@@ -208,25 +208,26 @@ jobs:
   lint:
     executor: my-executor
     steps:
-      - checkout
+      - sparse
       - restore
       - checkout
       - run:
           name: Lint
           command: |
-            source $(find ~/CircleCIWork -name moz-image*)/bin/activate
+            source $(find ~/CircleCIWork -name ${CIRCLE_PROJECT_REPONAME}*)/bin/activate
             make lint
       - notify_fail_slack
 
   test:
     executor: my-executor
     steps:
-      - checkout
+      - sparse
       - restore
+      - checkout
       - run:
           name: Test
           command: |
-            source $(find ~/CircleCIWork -name moz-image*)/bin/activate
+            source $(find ~/CircleCIWork -name ${CIRCLE_PROJECT_REPONAME}*)/bin/activate
             make ut
             bash <(curl -s https://codecov.io/bash)
       - store_artifacts:
