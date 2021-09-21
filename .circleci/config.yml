@@ -121,8 +121,8 @@ commands:
       - run:
           name: Sparse checkout
           command: |
-            mkdir git_sparse
-            cd git_sparse
+            mkdir ~/git_sparse
+            cd ~/git_sparse
             git init
             git remote add origin https://github.com/mozkzki/${CIRCLE_PROJECT_REPONAME}.git
             git config core.sparsecheckout true
@@ -130,7 +130,7 @@ commands:
             echo "pyproject.toml" >> .git/info/sparse-checkout
             git pull --depth=1 origin ${CIRCLE_BRANCH}
             cd ..
-            ls -al git_sparse
+            ls -al ~/git_sparse
 
   restore:
     steps:
@@ -139,13 +139,13 @@ commands:
             matches: { pattern: "^dependabot.+$", value: << pipeline.git.branch >> }
           steps:
             - restore_cache:
-                key: key-{{ .Environment.CIRCLE_PROJECT_REPONAME }}-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ checksum "pyproject.toml" }}
+                key: key-{{ .Environment.CIRCLE_PROJECT_REPONAME }}-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ checksum "~/git_sparse/pyproject.toml" }}
       - unless:
           condition:
             matches: { pattern: "^dependabot.+$", value: << pipeline.git.branch >> }
           steps:
             - restore_cache:
-                key: key-{{ .Environment.CIRCLE_PROJECT_REPONAME }}-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ checksum "poetry.lock" }}
+                key: key-{{ .Environment.CIRCLE_PROJECT_REPONAME }}-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ checksum "~/git_sparse/poetry.lock" }}
 
   save:
     steps:
@@ -156,7 +156,7 @@ commands:
             - save_cache:
                 paths:
                   - "."
-                key: key-{{ .Environment.CIRCLE_PROJECT_REPONAME }}-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ checksum "pyproject.toml" }}
+                key: key-{{ .Environment.CIRCLE_PROJECT_REPONAME }}-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ checksum "~/git_sparse/pyproject.toml" }}
       - unless:
           condition:
             matches: { pattern: "^dependabot.+$", value: << pipeline.git.branch >> }
@@ -164,7 +164,7 @@ commands:
             - save_cache:
                 paths:
                   - "."
-                key: key-{{ .Environment.CIRCLE_PROJECT_REPONAME }}-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ checksum "poetry.lock" }}
+                key: key-{{ .Environment.CIRCLE_PROJECT_REPONAME }}-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ checksum "~/git_sparse/poetry.lock" }}
 
 jobs:
 
