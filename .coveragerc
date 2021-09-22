@@ -1,8 +1,4 @@
 [run]
 omit =
-    */*_test.py
-    */app.py
-    */cli.py
-    */main.py
     */__main__.py
     */__init__.py

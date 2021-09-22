@@ -184,7 +184,7 @@ jobs:
                   pwd
                   whoami
                   python --version
-                  poetry config virtualenvs.path $CIRCLE_WORKING_DIRECTORY
+                  eval "poetry config virtualenvs.path ${CIRCLE_WORKING_DIRECTORY}"
                   poetry update
             - save
             - store_artifacts:
@@ -200,12 +200,8 @@ jobs:
                   pwd
                   whoami
                   python --version
-                  echo $CIRCLE_WORKING_DIRECTORY
-                  echo "$CIRCLE_WORKING_DIRECTORY"
-                  echo poetry config virtualenvs.path $CIRCLE_WORKING_DIRECTORY
                   eval "poetry config virtualenvs.path ${CIRCLE_WORKING_DIRECTORY}"
                   poetry install
-                  eval "ls -al ${CIRCLE_WORKING_DIRECTORY}"
             - save
             - notify_fail_slack
 
