@@ -184,6 +184,7 @@ jobs:
                   pwd
                   whoami
                   python --version
+                  poetry --version
                   eval "poetry config virtualenvs.path ${CIRCLE_WORKING_DIRECTORY}"
                   poetry update
             - save
@@ -200,6 +201,7 @@ jobs:
                   pwd
                   whoami
                   python --version
+                  poetry --version
                   eval "poetry config virtualenvs.path ${CIRCLE_WORKING_DIRECTORY}"
                   poetry install
             - save
