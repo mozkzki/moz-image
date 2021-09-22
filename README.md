@@ -1,5 +1,9 @@
 # moz-image
 
+[![CircleCI](https://circleci.com/gh/mozkzki/moz-image/tree/master.svg?style=svg)](https://circleci.com/gh/mozkzki/moz-image/tree/master)
+[![codecov](https://codecov.io/gh/mozkzki/moz-image/branch/master/graph/badge.svg?token=BRB5vsPkO2)](https://codecov.io/gh/mozkzki/moz-image)
+[![Maintainability](https://api.codeclimate.com/v1/badges/df50bbce59225073a577/maintainability)](https://codeclimate.com/github/mozkzki/moz-image/maintainability)
+
 画像関連の操作を行う自前ライブラリ。
 
 ## Function
