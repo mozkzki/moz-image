@@ -203,7 +203,7 @@ jobs:
                   echo $CIRCLE_WORKING_DIRECTORY
                   echo "$CIRCLE_WORKING_DIRECTORY"
                   echo poetry config virtualenvs.path $CIRCLE_WORKING_DIRECTORY
-                  poetry config virtualenvs.path $CIRCLE_WORKING_DIRECTORY
+                  eval "poetry config virtualenvs.path ${CIRCLE_WORKING_DIRECTORY}"
                   poetry install
                   ls -al "$CIRCLE_WORKING_DIRECTORY"
             - save
@@ -218,7 +218,7 @@ jobs:
       - run:
           name: Lint
           command: |
-            source $(find ~/CircleCIWork -name ${CIRCLE_PROJECT_REPONAME}*)/bin/activate
+            source $(find . -name ${CIRCLE_PROJECT_REPONAME}*)/bin/activate
             make lint
       - notify_fail_slack
 
@@ -232,7 +232,7 @@ jobs:
       - run:
           name: Test
           command: |
-            source $(find ~/CircleCIWork -name ${CIRCLE_PROJECT_REPONAME}*)/bin/activate
+            source $(find . -name ${CIRCLE_PROJECT_REPONAME}*)/bin/activate
             make ut
             bash <(curl -s https://codecov.io/bash)
       - store_artifacts:
