@@ -184,6 +184,8 @@ jobs:
                   pwd
                   whoami
                   python --version
+                  curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python
+                  source ~/.poetry/env
                   poetry --version
                   eval "poetry config virtualenvs.path ${CIRCLE_WORKING_DIRECTORY}"
                   poetry update
