@@ -200,6 +200,9 @@ jobs:
                   pwd
                   whoami
                   python --version
+                  echo $CIRCLE_WORKING_DIRECTORY
+                  echo "$CIRCLE_WORKING_DIRECTORY"
+                  echo poetry config virtualenvs.path $CIRCLE_WORKING_DIRECTORY
                   poetry config virtualenvs.path $CIRCLE_WORKING_DIRECTORY
                   poetry install
             - save
