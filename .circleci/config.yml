@@ -205,7 +205,7 @@ jobs:
                   echo poetry config virtualenvs.path $CIRCLE_WORKING_DIRECTORY
                   eval "poetry config virtualenvs.path ${CIRCLE_WORKING_DIRECTORY}"
                   poetry install
-                  ls -al "$CIRCLE_WORKING_DIRECTORY"
+                  eval "ls -al ${CIRCLE_WORKING_DIRECTORY}"
             - save
             - notify_fail_slack
 
