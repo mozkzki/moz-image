@@ -33,7 +33,7 @@ pytest = "6.2.5"
 black = "21.10b0"
 pytest-cov = "3.0.0"
 coverage = "6.1.1"
-isort = "5.9.3"
+isort = "5.10.0"
 Sphinx = "^4.2.0"
 sphinx-rtd-theme = "^1.0.0"
 
