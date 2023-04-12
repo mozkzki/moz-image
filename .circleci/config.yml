@@ -137,13 +137,13 @@ commands:
     steps:
       - when:
           condition:
-            matches: { pattern: "^dependabot.+$", value: << pipeline.git.branch >> }
+            matches: { pattern: "^renovate.+$", value: << pipeline.git.branch >> }
           steps:
             - restore_cache:
                 key: key-{{ .Environment.CIRCLE_PROJECT_REPONAME }}-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ checksum "~/git_sparse/pyproject.toml" }}
       - unless:
           condition:
-            matches: { pattern: "^dependabot.+$", value: << pipeline.git.branch >> }
+            matches: { pattern: "^renovate.+$", value: << pipeline.git.branch >> }
           steps:
             - restore_cache:
                 key: key-{{ .Environment.CIRCLE_PROJECT_REPONAME }}-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ checksum "~/git_sparse/poetry.lock" }}
@@ -152,7 +152,7 @@ commands:
     steps:
       - when:
           condition:
-            matches: { pattern: "^dependabot.+$", value: << pipeline.git.branch >> }
+            matches: { pattern: "^renovate.+$", value: << pipeline.git.branch >> }
           steps:
             - save_cache:
                 paths:
@@ -160,7 +160,7 @@ commands:
                 key: key-{{ .Environment.CIRCLE_PROJECT_REPONAME }}-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ checksum "~/git_sparse/pyproject.toml" }}
       - unless:
           condition:
-            matches: { pattern: "^dependabot.+$", value: << pipeline.git.branch >> }
+            matches: { pattern: "^renovate.+$", value: << pipeline.git.branch >> }
           steps:
             - save_cache:
                 paths:
@@ -177,7 +177,7 @@ jobs:
       - checkout
       - when:
           condition:
-            matches: { pattern: "^dependabot.+$", value: << pipeline.git.branch >> }
+            matches: { pattern: "^renovate.+$", value: << pipeline.git.branch >> }
           steps:
             - run:
                 name: Install for resolve dependency
@@ -194,7 +194,7 @@ jobs:
             - notify_fail_slack
       - unless:
           condition:
-            matches: { pattern: "^dependabot.+$", value: << pipeline.git.branch >> }
+            matches: { pattern: "^renovate.+$", value: << pipeline.git.branch >> }
           steps:
             - run:
                 name: Install
