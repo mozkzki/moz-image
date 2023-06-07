@@ -2,7 +2,7 @@ version: 2.1
 executors:
   my-executor:
     docker:
-      - image: cimg/python:3.11.3-browsers
+      - image: cimg/python:3.11.4-browsers
     working_directory: ~/CircleCIWork
 
 orbs:
