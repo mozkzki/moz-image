@@ -6,7 +6,7 @@ executors:
     working_directory: ~/CircleCIWork
 
 orbs:
-  slack: circleci/slack@4.12.6
+  slack: circleci/slack@4.13.1
   codecov: codecov/codecov@3.3.0
 
 commands:
